@@ -1,6 +1,12 @@
 const express = require('express');
+const bodyParser=require('body-parser');
+const mongoose=require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/findyoursimrandatabase');
 const app=express();
 
+
+app.use(bodyParser.json());
 // Importing the api route
 const api=require('./Routes/api');
 
