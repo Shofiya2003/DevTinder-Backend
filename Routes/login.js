@@ -1,43 +1,25 @@
 const express=require('express');
 const bcrypt=require('bcryptjs');
+const jwt=require('jsonwebtoken');
+const User=require('../models/user');
+const JWT_SECRET="jfhfksndhgkdlj"
 const router=express.Router();
 
-
-const User=require('../models/user');
-
-router.get('/',(req,res)=>{
-    res.send('This is the api for login of find your simran');
-});
-
 router.post('/',async (req,res)=>{
-    const {username,password:plaintextpassword}=req.body;
-    if(!username || typeof username!=="string"){
-        res.json({status:'err',error:'Invalid Username'});
+    const {username,password}=req.body;
+    console.log(password);
+    const user=await User.findOne({username});
+    if(!user){
+        res.json({status:'error',error:'Invalid username or password'});
     }
-
-    if(!plaintextpassword || typeof plaintextpassword!=='string'){
-        res.json({status:'err',error:'Invalid password'});
+    console.log(user);
+    if(await bcrypt.compare(password,user.password)){
+        // Password,username combination is successful
+        const token=jwt.sign({username:username,id:user._id},JWT_SECRET);
+        res.json({status:'ok',data:token});
     }
-
-    if(plaintextpassword.length<5){
-        res.json({status:'err',error:'Password too short.It should have atleast 8 characters'});
-    }
-    const password=await bcrypt.hash(plaintextpassword,10);
-    try{
-        const newUser=await User.create({
-            username,
-            password
-        });
-        console.log(`user created successfully ${newUser}`);
-    }catch(error){
-        if(error.code===11000){
-            //duplicate key
-            res.json({status:"err",error:"Username already in use"});
-        }
-       else res.json({error:error});
-    }
-
-    res.json({status:"ok"});
-});
+    else 
+        res.json({status:'error',error:'Invalid username or password'});
+})
 
 module.exports=router;

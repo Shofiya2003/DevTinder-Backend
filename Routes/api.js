@@ -3,9 +3,10 @@ const express=require('express');
 const router=express.Router();
 
 // importing the login route
+const signup=require('./signup');
 const login=require('./login');
-
-router.use('/signup',login);
+router.use('/signup',signup);
+router.use('/login',login)
 
 
 router.get('/',(req,res)=>{
