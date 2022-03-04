@@ -5,8 +5,12 @@ const userInfoSchema=new mongoose.Schema({
     name:{type:String,required:true},
     institution:{type:String},
     batch:{type:Number},
-    skills={type:[String],required:true},
-    bio={type:String,required:true},
-    socialLinks={type:Map,of:String},
-    avatar={type:String}
-})
+    skills:{type:[String],required:true},
+    bio:{type:String,required:true},
+    socialLinks:{type:Map,of:String},
+    avatar:{type:String}
+});
+
+const developer=mongoose.model('developer',userInfoSchema);
+
+module.exports=developer;
