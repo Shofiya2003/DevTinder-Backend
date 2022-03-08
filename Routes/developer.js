@@ -5,7 +5,7 @@ const Developer=require('../models/userInfo');
 
 const {get,post}=require('../Controllers/developer');
 
-router.get('/',get);
+router.get('/:id',get);
 
 router.post('/',post);
 

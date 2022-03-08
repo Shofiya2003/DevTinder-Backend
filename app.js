@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser=require('body-parser');
 const mongoose=require('mongoose');
-
+const cors=require('cors');
 mongoose.connect('mongodb://localhost:27017/findyoursimrandatabase');
 const app=express();
+app.use(cors());
 
 
 app.use(bodyParser.json());

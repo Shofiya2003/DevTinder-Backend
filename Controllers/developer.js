@@ -1,16 +1,24 @@
 const mongoose=require('mongoose')
 const Developer=require('../models/userInfo')
 const get=async (req,res)=>{
-    const {id}=req.body;
-    if(!mongoose.isValidObjectId(id)){
+    const {id}=req.params;
+    console.log(id);
+    if(!mongoose.isValidObjectId(Number(id))){
         res.json({status:'error',error:"Incorrect user id"});
+        return;
     }
-    const developer=await Developer.findOne({userId:id});
-    if(!developer){
-        res.json({status:'error',error:"Developer not found"});
+    try{
+        const developer=await Developer.findOne({userId:id});
+
+        if(!developer){
+            res.json({status:'error',error:"Developer not found"});
+        }
+        else
+            res.json({status:'ok',data:developer});
+    }catch(err){
+        res.json({status:'err',err:err});
     }
-    else
-        res.json({status:'ok',data:developer});
+    
 }
 
 
